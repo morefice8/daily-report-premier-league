@@ -1,0 +1,50 @@
+body {
+    background: none; /* Elimina otros fondos */
+}
+
+#background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../badges/eng/Premier_League_Banner.png");
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px); /* Aplica un desenfoque solo al fondo */
+    z-index: -1; /* Coloca el fondo detrás del contenido */
+}
+
+/* Contenedor principal del informe */
+#report-content {
+    max-width: 95%;  /* Aumenta el ancho hasta el 90% de la página */
+    margin: 0 auto;  /* Centra el informe */
+    padding: 20px;  /* Añade algo de espacio interno */
+    background: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente para mayor legibilidad */
+    border-radius: 10px;  /* Esquinas redondeadas para un diseño más limpio */
+}
+
+/* Centrar solo el título principal (H1) */
+h1 {
+    text-align: center;
+    font-size: 2em; /* Un poco más grande */
+}
+
+/* Mantener H2 y H3 alineados a la izquierda */
+h2, h3 {
+    text-align: left;
+    font-size: 1.6em; /* Aumenta ligeramente */
+}
+
+/* Optimizar el texto para una lectura más fluida */
+p {
+    font-size: 1.2em;
+    line-height: 1.6;
+}
+
+#report-content img {
+    max-width: 90%;  /* Reduce el ancho al 80% del contenedor */
+    height: auto;  /* Mantiene las proporciones */
+    display: block;  /* Evita márgenes indeseados */
+    margin: 0 auto 20px auto; /* Centra la imagen y agrega espacio abajo */
+}

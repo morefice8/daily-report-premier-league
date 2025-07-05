@@ -1,0 +1,391 @@
+---
+title: "Daily Report Premier League"
+author: "Michele OREFICE"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output: 
+  html_document:
+    css: "css/custom_style.css"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggrepel)
+library(htmltools)
+
+source(file.path(script_dir, "functions_library", "prepare_data.R"))    # Funciónes para manpular datos
+source(file.path(script_dir, "functions_library", "prepare_plots.R"))   # Funciónes para generar graficos
+
+team_stats <- read_csv("cleaned_team_overall_data.csv")
+team_stats <- assign_badge_code(team_stats, "Premier League")
+team_stats$badge_image <- paste("./badges/eng/",team_stats$badge_code ,".png",sep="")
+cleaned_team_possession <- read_csv("cleaned_team_possession.csv")
+
+# Definir la ruta del banner de la Premier League
+banner_path <- file.path(script_dir, "badges", "eng", "Premier_League_Banner.png")
+
+```
+
+<div id="background-container"></div>
+
+<div id="report-content">
+
+```{r banner, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics(banner_path)
+```
+
+# Análisis de Desempeño de Equipos en la Premier League 2024/2025
+
+En este informe se realizará un análisis detallado del desempeño de los equipos de la Premier League 2024/2025, centrado en dos aspectos fundamentales: la **eficiencia ofensiva** y la **eficiencia defensiva**. Para ello, se emplearán métricas avanzadas como los **goles esperados (xG)** y los **goles esperados contra (xGA)**. Estas métricas proporcionan una visión más precisa y matizada de las capacidades de los equipos, más allá de los simples goles anotados o concedidos.
+
+## Objetivo del Informe
+
+El objetivo principal de este análisis es explorar cómo las métricas de xG y xGA se relacionan con el rendimiento real de los equipos, identificando patrones en su capacidad ofensiva y defensiva. Además, se busca identificar aquellos equipos que están destacando tanto por su capacidad para generar oportunidades de gol como por su capacidad para prevenir goles, así como aquellos equipos que están sobre- o sub-performando respecto a sus expectativas.
+
+## Metodología
+
+Para llevar a cabo este análisis, se han utilizado las siguientes métricas y enfoques:
+
+-   **xG (Expected Goals)**: Mide la cantidad de goles esperados a partir de las oportunidades de gol generadas por un equipo. Este valor tiene en cuenta factores como la posición de tiro, el tipo de jugada y la dificultad del disparo.
+
+-   **xGA (Expected Goals Against)**: Mide la cantidad de goles que un equipo debería haber concedido, basado en las oportunidades de gol que su defensa ha permitido.
+
+-   **Puntos por partido (PPG)**: Representa el rendimiento de un equipo en términos de puntos obtenidos por partido.
+
+El informe se centra en analizar la relación entre estas métricas, utilizando gráficos y estadísticas para proporcionar una visión clara de las tendencias y patrones que surgen durante la temporada.
+
+## Estructura del Informe
+
+A lo largo del informe, se presentarán diferentes gráficos que muestran las relaciones entre estas métricas. En particular, se destacan dos visualizaciones clave:
+
+1.  **Relación entre Goles Anotados (GF) y Goles Esperados (xG)**: Este gráfico analiza cómo los equipos están maximizando su capacidad ofensiva.
+
+2.  **Relación entre Goles Esperados (xG) y Puntos por Partido (PPG)**: Este gráfico examina el desempeño global de los equipos en función de su capacidad para generar goles y ganar partidos.
+
+Además, se discutirán las implicaciones de los resultados obtenidos, proporcionando conclusiones sobre qué equipos están destacando por encima o por debajo de lo esperado.
+
+## Propósito del Análisis
+
+El propósito de este análisis es proporcionar una comprensión más profunda de las dinámicas de la Premier League, ayudando a los analistas, entrenadores y aficionados a comprender mejor los aspectos fundamentales que afectan el rendimiento de los equipos. Además, se intentará identificar posibles áreas de mejora y destacar aquellos equipos que están demostrando un rendimiento excepcional, ya sea ofensiva o defensivamente.
+
+------------------------------------------------------------------------
+
+## Relación entre Goles Anotados y Goles Esperados (xG)
+
+En este gráfico se visualiza la relación entre los goles anotados (`gf`) y los goles esperados (`xG`) para los equipos de la Premier League. Se incluye una **línea de regresión lineal**, que facilita la identificación de patrones en los datos y proporciona una visualización clara de la relación entre las dos métricas.
+
+### Interpretación del gráfico:
+
+-   **Línea de regresión**: La línea azul representa la tendencia central entre los goles anotados y los goles esperados. Esta línea permite observar cómo, en promedio, los goles anotados deberían correlacionarse con los goles esperados para cada equipo. Si un equipo se encuentra por encima de esta línea, esto indica que está anotando más goles de los que se esperaban según su rendimiento ofensivo (lo que implica una "sobresalida" en la eficiencia ofensiva). Por el contrario, si un equipo está por debajo de la línea, significa que no está aprovechando tanto sus oportunidades.
+
+-   **Correlación**: La **correlación de 0.89** indica una relación fuerte y positiva entre los goles anotados y los goles esperados. Esto sugiere que, en general, los equipos tienden a anotar una cantidad de goles cercana a la cantidad de goles esperados según sus estadísticas de xG. Este valor de correlación muestra que las métricas de goles esperados son un buen predictor de los goles anotados para la mayoría de los equipos.
+
+### Análisis:
+
+-   **Equipos con alta eficiencia ofensiva**: Los equipos que están por encima de la línea de regresión y se encuentran en la parte superior derecha del gráfico (es decir, anotando más goles de los que se esperaban) son considerados como equipos con una **alta eficiencia ofensiva**. Estos equipos son capaces de maximizar las oportunidades de gol que crean y convertirlas con éxito.
+
+-   **Equipos ineficaces**: Los equipos situados en la parte inferior derecha, que anotan menos goles de los que se esperaban según su xG, podrían ser considerados **ineficaces en la finalización** o que dependen en exceso de factores aleatorios. Estos equipos podrían estar perdiendo oportunidades claras de marcar, lo que afecta su rendimiento general.
+
+-   **Equipos con bajo rendimiento ofensivo**: Aquellos equipos que se encuentran en la parte inferior izquierda del gráfico, debajo de la línea de regresión, podrían estar luchando por generar oportunidades de gol de alta calidad. Esto podría deberse a una estrategia defensiva sólida pero una falta de poder ofensivo para aprovechar sus oportunidades.
+
+```{r goles_vs_xG, echo=FALSE, fig.width=15, fig.height=10, message=FALSE}
+# Calcular la correlación entre los goles anotados (gf) y los goles esperados (xG)
+cor_value <- cor(team_stats$x_g, team_stats$gf)
+
+# Crear el gráfico de dispersión con una línea de regresión lineal
+ggplot(team_stats, aes(x = x_g, y = gf)) +
+  # Añadir la línea de regresión lineal
+  geom_smooth(method = "lm", col = "blue") +  # Línea de regresión
+  # Añadir los logos de los equipos
+  geom_image(aes(image = badge_image), size = 0.14) +  # Logos de los equipos
+  # Títulos y etiquetas para los ejes
+  labs(title = "Relación entre Expected Goals (xG) y Goles Anotados", 
+       x = "Goles Esperados (xG)", y = "Goles Anotados") +
+  # Añadir la correlación en la esquina superior izquierda
+  annotate("text", x = min(team_stats$x_g) + 0.5, y = max(team_stats$gf) - 2, 
+           label = paste("Correlación:", round(cor_value, 2)), 
+           color = "red", size = 5, fontface = "bold", hjust = 0) +  # Correlación entre xG y goles
+  # Tema minimalista
+  theme_minimal()
+
+```
+
+### Conclusiones:
+
+El análisis de la relación entre goles anotados y goles esperados (xG) permite evaluar la eficiencia ofensiva de los equipos de la Premier League. La alta correlación (0.89) entre ambas métricas indica que, en la mayoría de los casos, los equipos anotan una cantidad de goles cercana a la esperada, validando el xG como un predictor confiable del rendimiento ofensivo.
+
+Los equipos por encima de la línea de regresión destacan por su gran capacidad de finalización, convirtiendo más goles de lo esperado y demostrando una alta eficiencia ofensiva. En contraste, los equipos por debajo de la línea pueden estar desperdiciando oportunidades claras, lo que indica una ineficacia en la finalización o dependencia de factores externos como decisiones arbitrales o rendimiento de los porteros rivales.
+
+Además, aquellos equipos ubicados en la parte inferior izquierda no solo anotan menos de lo esperado, sino que también generan pocas oportunidades, lo que refleja un problema estructural en su ataque.
+
+Este análisis es clave para detectar tendencias en la finalización de los equipos y prever ajustes tácticos necesarios para mejorar su desempeño en lo que resta de la temporada.
+
+------------------------------------------------------------------------
+
+## xG vs Puntos por Partido
+
+En este gráfico se presenta la relación entre los **Goles Esperados (xG)** y los **Puntos por Partido (PPG)** para cada equipo de la Premier League en la temporada 2024/25. Este gráfico nos ayuda a identificar qué equipos están superando las expectativas en términos de rendimiento ofensivo y defensivo, y cuáles están teniendo dificultades para transformar sus oportunidades en puntos.
+
+### Explicación de las métricas:
+
+-   **xG (Goles Esperados)**: Mide la calidad de las oportunidades de gol que un equipo ha generado a lo largo de la temporada. Un valor alto de xG indica que el equipo ha creado muchas oportunidades de gol de alta calidad.
+
+-   **PPG (Puntos por Partido)**: Mide el número de puntos que un equipo ha ganado por partido en promedio. Se calcula dividiendo los puntos totales obtenidos entre los partidos jugados.
+
+### Cómo leer el gráfico:
+
+El gráfico está dividido en **4 cuadrantes**, determinados por las medias de **xG** y **PPG** para todos los equipos:
+
+1.  **Cuadrante Superior Derecho (🔥 Equipos Dominantes)**:
+    -   Equipos en este cuadrante tienen **alto xG** y **alto PPG**. Estos equipos están generando muchas oportunidades de gol y también logrando convertir esas oportunidades en puntos. Son equipos efectivos en ataque y defensa, y generalmente están entre los primeros en la clasificación.
+2.  **Cuadrante Superior Izquierdo (⚽️ Sobrerendimiento Defensivo)**:
+    -   Los equipos en este cuadrante tienen un **bajo xG** pero han obtenido más puntos de lo esperado (**alto PPG**). Esto indica que son equipos que probablemente han sido muy eficientes en defensa y han logrado obtener más puntos de los que su rendimiento ofensivo sugiere. Estos equipos pueden haber tenido suerte en los partidos o haberse beneficiado de un buen sistema defensivo.
+3.  **Cuadrante Inferior Derecho (❌ Ineficacia Ofensiva)**:
+    -   Los equipos en este cuadrante tienen un **alto xG** pero un **bajo PPG**. Esto sugiere que, aunque estos equipos han creado muchas oportunidades de gol, no han logrado obtener suficientes puntos. Podría ser indicativo de una ineficacia ofensiva o de la incapacidad de convertir esas oportunidades en goles.
+4.  **Cuadrante Inferior Izquierdo (🚨 Equipos en Dificultades)**:
+    -   Equipos con **bajo xG** y **bajo PPG**. Estos equipos están teniendo dificultades tanto para crear oportunidades de gol como para ganar puntos. Es probable que sean equipos con problemas en ambas áreas y podrían estar en riesgo de descender si no mejoran su rendimiento.
+
+### Análisis de los resultados:
+
+-   Los **equipos dominantes** en el cuadrante superior derecho (🔥) son aquellos que están teniendo un gran rendimiento ofensivo y defensivo, y probablemente estén luchando por los primeros lugares en la liga.
+
+-   Los **equipos en dificultades** (🚨) necesitan mejorar tanto en la ofensiva como en la defensiva. Si no cambian su rendimiento, pueden enfrentar serios problemas en la tabla de clasificación.
+
+-   Los **equipos sobrerendimiento defensivo** (⚽️) han logrado buenos resultados a pesar de no generar muchas oportunidades. Esto podría indicar que están defendiendo de manera muy efectiva o que han tenido suerte en sus partidos.
+
+-   Los **equipos con ineficacia ofensiva** (❌) están creando muchas oportunidades pero no las están aprovechando. Esto podría indicar que tienen una deficiencia en la finalización o en la toma de decisiones frente a la portería.
+
+```{r xg_vs_ppg, echo=FALSE, fig.width=15, fig.height=10, message=FALSE}
+
+# Calcular las medias de xG (goles esperados) y PPG (puntos por partido) para dividir los cuadrantes
+
+xg_mean <- mean(team_stats$x_g)  # Media de los Goles Esperados (xG)
+ppg_mean <- mean(team_stats$pts_mp)  # Media de los Puntos por Partido (PPG)
+
+ggplot(team_stats, aes(x = x_g, y = pts_mp)) +
+  # Añadimos los 4 rectángulos coloreados para resaltar los cuadrantes
+  geom_rect(aes(xmin = -Inf, xmax = xg_mean, ymin = -Inf, ymax = ppg_mean), fill = "#ff8b94", alpha = 0.8) +  # Cuadrante inferior izquierdo
+  geom_rect(aes(xmin = xg_mean, xmax = Inf, ymin = -Inf, ymax = ppg_mean), fill = "#fad7a0", alpha = 0.1) +  # Cuadrante inferior derecho
+  geom_rect(aes(xmin = -Inf, xmax = xg_mean, ymin = ppg_mean, ymax = Inf), fill = "#33daff", alpha = 0.1) +  # Cuadrante superior izquierdo
+  geom_rect(aes(xmin = xg_mean, xmax = Inf, ymin = ppg_mean, ymax = Inf), fill = "#80ff33", alpha = 0.1) +  # Cuadrante superior derecho
+  
+  # Añadimos los puntos para cada equipo
+  geom_point(size = 3) +  # Puntos de los equipos
+  geom_image(aes(image = badge_image), size = 0.14) +  # Logos de los equipos
+  
+  # Línea de tendencia para mostrar la relación entre xG y PPG
+  geom_smooth(method = "lm", col = "red") +  # Línea de regresión
+  
+  # Líneas guía para dividir los cuadrantes
+  geom_vline(xintercept = xg_mean, linetype = "dashed", color = "grey") +  # Línea vertical en la media de xG
+  geom_hline(yintercept = ppg_mean, linetype = "dashed", color = "grey") +  # Línea horizontal en la media de PPG
+  
+  # Añadimos los valores de las medias en las líneas separadoras
+  annotate("text", x = xg_mean, y = max(team_stats$pts_mp) + 0.3, label = paste("xG Medio: ", round(xg_mean, 2)), color = "black", size = 4, fontface = "italic", hjust = 0.5) +  # Valor de la media de xG (en la línea vertical)
+  annotate("text", x = max(team_stats$x_g), y = ppg_mean, label = paste("PPG Medio: ", round(ppg_mean, 2)), color = "black", size = 4, fontface = "italic", hjust = 1, vjust = 0.5) +  # Valor de la media de PPG (en la línea horizontal)
+  
+  # Añadimos las captions para cada cuadrante
+  annotate("text", x = min(team_stats$x_g), y = max(team_stats$pts_mp) + 0.5, label = "⚽️ Sobrerendimiento defensivo", hjust = 0, vjust = 1, color = "blue", size = 5) +  # Cuadrante inferior izquierdo
+  annotate("text", x = max(team_stats$x_g), y = max(team_stats$pts_mp) + 0.5, label = "🔥 Equipos dominantes", hjust = 1, vjust = 1, color = "darkgreen", size = 5) +  # Cuadrante superior derecho
+  annotate("text", x = min(team_stats$x_g), y = min(team_stats$pts_mp) - 0.5, label = "🚨 Equipos en dificultades", hjust = 0, vjust = 0, color = "red", size = 5) +  # Cuadrante inferior izquierdo
+  annotate("text", x = max(team_stats$x_g), y = min(team_stats$pts_mp) - 0.5, label = "❌ Ineficacia ofensiva", hjust = 1, vjust = 0, color = "orange", size = 5) +  # Cuadrante superior izquierdo
+  
+  # Títulos y etiquetas de los ejes
+  labs(title = "xG vs Puntos por Partido",
+       x = "Goles Esperados (xG)",
+       y = "Puntos por Partido") +
+  theme_minimal()  # Tema minimalista
+
+```
+
+### Conclusión:
+
+El análisis de la relación entre xG y Puntos por Partido (PPG) ofrece una perspectiva clave sobre la eficiencia y el rendimiento de los equipos en la Premier League. Los equipos dominantes (🔥) logran traducir su generación de oportunidades en puntos, consolidándose como contendientes al título.
+
+Por otro lado, los equipos que sobrepasan las expectativas defensivamente (⚽️) han conseguido buenos resultados sin generar muchas oportunidades de gol, lo que puede deberse a una defensa sólida, una alta efectividad en la conversión de sus ocasiones o incluso factores externos como la suerte.
+
+Los equipos con ineficacia ofensiva (❌) muestran dificultades para transformar sus oportunidades en puntos, lo que podría indicar problemas en la finalización o en la toma de decisiones en el área rival. Finalmente, los equipos en dificultades (🚨) enfrentan problemas tanto ofensivos como defensivos, lo que los coloca en una situación delicada en la clasificación.
+
+Este gráfico permite no solo evaluar qué equipos están rindiendo por encima o por debajo de las expectativas, sino también prever posibles ajustes tácticos necesarios para mejorar su desempeño en el resto de la temporada.
+
+------------------------------------------------------------------------
+
+## Eficiencia Ofensiva vs Defensiva
+
+El gráfico que se presenta a continuación muestra la relación entre la eficiencia ofensiva y defensiva de los equipos de la Premier League durante la temporada 2024/25. En este gráfico, se han utilizado dos métricas clave para analizar el rendimiento de los equipos: **xG (goles esperados)** y **xGA (goles esperados en contra)**. Estas métricas son fundamentales para evaluar cómo un equipo genera oportunidades de gol y cómo es capaz de evitar que su oponente marque.
+
+### Explicación de las métricas:
+
+-   **xG (Goles Esperados)**: Esta métrica mide la calidad de las oportunidades de gol creadas por un equipo. Un valor de xG más alto indica que el equipo está generando oportunidades más claras y peligrosas para marcar. Un equipo con un alto xG es probable que haya creado varias jugadas de peligro, pero no necesariamente haya marcado todos esos goles. Es un indicador de la eficacia ofensiva.
+
+-   **xGA (Goles Esperados en Contra)**: Esta métrica mide la cantidad de goles que se espera que reciba un equipo, basándose en las oportunidades de gol generadas por el equipo contrario. Un valor bajo de xGA indica que un equipo está defendiendo bien y limitando las ocasiones de gol del adversario.
+
+### Cómo leer el gráfico:
+
+El gráfico está dividido en **4 cuadrantes**, basados en las medias de xG y xGA para todos los equipos de la Premier League en la temporada 2024/25:
+
+1.  **Cuadrante superior izquierdo (🔵 Equipos Top)**:
+    -   Equipos en este cuadrante tienen un **alto xG** (buena capacidad ofensiva) y un **bajo xGA** (buena capacidad defensiva).
+    -   Estos equipos están logrando crear muchas oportunidades de gol mientras limitan las oportunidades del oponente. Son los equipos más equilibrados en términos de ataque y defensa, con un rendimiento consistente tanto en ofensiva como en defensa.
+2.  **Cuadrante superior derecho (🟢 Equipos Espectaculares)**:
+    -   Equipos en este cuadrante tienen un **alto xG** pero también un **alto xGA**.
+    -   Estos equipos son muy fuertes en ataque, generando muchas oportunidades de gol, pero también permiten muchas ocasiones a sus rivales. Son equipos que suelen ofrecer partidos muy emocionantes, con un alto número de goles, pero su defensa podría ser vulnerable.
+3.  **Cuadrante inferior izquierdo (🟡 Equipos Defensivos)**:
+    -   Equipos en este cuadrante tienen un **bajo xG** (pocas oportunidades de gol) y un **bajo xGA** (buena defensa).
+    -   Estos equipos son muy sólidos defensivamente, evitando que los rivales marquen goles, pero no generan muchas ocasiones claras para sí mismos. Suelen ser equipos más conservadores que priorizan la defensa sobre el ataque.
+4.  **Cuadrante inferior derecho (🔴 Equipos en Riesgo de Descenso)**:
+    -   Equipos en este cuadrante tienen un **bajo xG** y un **alto xGA**.
+    -   Estos equipos tienen problemas tanto en la ofensiva como en la defensiva. No generan muchas oportunidades de gol y, además, permiten muchas ocasiones al oponente. Este perfil es característico de equipos en riesgo de descenso, ya que tienen dificultades tanto para marcar goles como para defender.
+
+### Análisis de los resultados:
+
+-   Los **equipos más equilibrados** suelen estar en el cuadrante superior izquierdo (🔵), ya que no solo crean oportunidades, sino que también limitan las del oponente. Estos equipos suelen estar en la parte superior de la tabla de clasificación.
+
+-   Los **equipos espectaculares** (🟢), aunque son muy efectivos ofensivamente, deben mejorar su defensa para evitar partidos con demasiados goles en contra. Estos equipos son emocionantes para ver, pero podrían ser vulnerables en partidos de alta presión.
+
+-   Los **equipos defensivos** (🟡) priorizan la solidez en la defensa, pero su falta de creatividad ofensiva podría estar limitando su capacidad para ganar partidos. Estos equipos a menudo se concentran en evitar derrotas más que en buscar victorias.
+
+-   Los **equipos en riesgo de descenso** (🔴) necesitan mejorar tanto en defensa como en ataque. Tienen serias dificultades para competir al más alto nivel, ya que no generan oportunidades y, al mismo tiempo, permiten muchas ocasiones a sus rivales.
+
+```{r xg_vs_xga, echo=FALSE, fig.width=15, fig.height=10}
+
+# Calcular las medias de xG (goles esperados) y xGA (goles esperados en contra) para dividir los cuadrantes
+mean_xg <- mean(team_stats$x_g, na.rm = TRUE)  # Media de goles esperados (xG)
+mean_xga <- mean(team_stats$x_ga, na.rm = TRUE)  # Media de goles esperados en contra (xGA)
+
+# Encontramos los valores mínimos y máximos de xG y xGA para posicionar las etiquetas (caption) de los cuadrantes
+x_min <- min(team_stats$x_ga, na.rm = TRUE) - 2  # Mínimo valor de xGA con un pequeño margen
+x_max <- max(team_stats$x_ga, na.rm = TRUE) + 2  # Máximo valor de xGA con un pequeño margen
+y_min <- min(team_stats$x_g, na.rm = TRUE) - 8  # Mínimo valor de xG con un pequeño margen
+y_max <- max(team_stats$x_g, na.rm = TRUE) + 5  # Máximo valor de xG con un pequeño margen
+
+ggplot(team_stats, aes(x = x_ga, y = x_g, label = squad)) +
+
+  # Añadir los 4 rectángulos coloreados para destacar los cuadrantes
+  annotate("rect", xmin = -Inf, xmax = mean_xga, ymin = mean_xg, ymax = Inf, fill = "blue", alpha = 0.2) +  # Cuadrante: Equipos Top
+  annotate("rect", xmin = mean_xga, xmax = Inf, ymin = mean_xg, ymax = Inf, fill = "green", alpha = 0.2) +  # Cuadrante: Equipos Espectaculares
+  annotate("rect", xmin = -Inf, xmax = mean_xga, ymin = -Inf, ymax = mean_xg, fill = "yellow", alpha = 0.2) +  # Cuadrante: Equipos Defensivos
+  annotate("rect", xmin = mean_xga, xmax = Inf, ymin = -Inf, ymax = mean_xg, fill = "red", alpha = 0.2) +  # Cuadrante: Equipos en Riesgo de Descenso
+
+  # Añadir las etiquetas (caption) de los cuadrantes en las esquinas extremas
+  annotate("text", x = x_min, y = y_max, label = "🔵 Equipos Top", color = "blue", size = 5, fontface = "bold", hjust = 0, vjust = 1) +  # Cuadrante superior izquierdo
+  annotate("text", x = x_max, y = y_max, label = "🟢 Equipos Espectaculares", color = "darkgreen", size = 5, fontface = "bold", hjust = 1, vjust = 1) +  # Cuadrante superior derecho
+  annotate("text", x = x_min, y = y_min, label = "🟡 Equipos Defensivos", color = "orange", size = 5, fontface = "bold", hjust = 0, vjust = 0) +  # Cuadrante inferior izquierdo
+  annotate("text", x = x_max, y = y_min, label = "🔴 Equipos en Riesgo de Descenso", color = "red", size = 5, fontface = "bold", hjust = 1, vjust = 0) +  # Cuadrante inferior derecho
+
+  # Añadir los puntos para los equipos (con sus respectivas posiciones en xGA y xG)
+  geom_point(size = 4, alpha = 0.8, color = "black") +
+
+  # Añadir las imágenes de los logotipos de los equipos en lugar de las etiquetas de texto
+  geom_image(aes(image = badge_image), size = 0.14) +  # Logos de los equipos
+
+  # Líneas divisorias para separar los cuadrantes (líneas punteadas)
+  geom_vline(xintercept = mean_xga, linetype = "dashed", color = "gray") +  # Línea vertical en la media de xGA
+  geom_hline(yintercept = mean_xg, linetype = "dashed", color = "gray") +  # Línea horizontal en la media de xG
+  
+  # Añadir las etiquetas de las medias en las líneas divisorias
+  annotate("text", x = mean_xga, y = y_max + 1, label = paste("xGA Medio: ", round(mean_xga, 2)), color = "black", size = 4, fontface = "italic", hjust = 0.5) +  # Etiqueta en la línea vertical
+  annotate("text", x = x_max - 5, y = mean_xg, label = paste("xG Medio: ", round(mean_xg, 2)), color = "black", size = 4, fontface = "italic", hjust = 0) +  # Etiqueta en la línea horizontal
+
+  # Títulos y etiquetas del eje
+  labs(
+    title = "Eficiencia Ofensiva vs Defensiva",  # Título del gráfico
+    x = "Goles Esperados en Contra (xGA) - Defensa",  # Etiqueta del eje X
+    y = "Goles Esperados (xG) - Ataque"  # Etiqueta del eje Y
+  ) +
+
+  # Estilo minimalista para hacer el gráfico más limpio
+  theme_minimal()
+
+```
+
+### Conclusión:
+
+El análisis de la eficiencia ofensiva y defensiva nos ofrece una visión clara sobre las tendencias de juego de los equipos en la Premier League. Los equipos más equilibrados (🔵) combinan una alta capacidad ofensiva con una defensa sólida, lo que les permite competir por los primeros puestos de la clasificación.
+
+Por otro lado, los equipos espectaculares (🟢) destacan por su capacidad de generar ocasiones de gol, pero su fragilidad defensiva puede afectar su rendimiento en partidos clave. Los equipos defensivos (🟡) muestran solidez en la retaguardia, pero su falta de poder ofensivo podría limitar su éxito a largo plazo. Finalmente, los equipos en riesgo de descenso (🔴) enfrentan desafíos tanto en ataque como en defensa, lo que compromete seriamente sus posibilidades de mantenerse en la liga.
+
+Este gráfico no solo ayuda a comprender la identidad táctica de cada equipo, sino que también permite identificar áreas de mejora clave que podrían influir en su desempeño a lo largo de la temporada.
+
+------------------------------------------------------------------------
+
+## Análisis de la Posesión y Presión en el Campo
+
+En esta sección se analiza cómo los equipos de la Premier League distribuyen la posesión del balón y ejercen presión en diferentes zonas del campo, específicamente en los tres tercios: defensivo, medio y ofensivo. La posesión y la presión son dos métricas clave para comprender las tácticas de un equipo, ya que reflejan tanto su control del balón como su capacidad para presionar al oponente y recuperar el balón.
+
+### Posesión en Cada Tercio del Campo
+
+Se ha calculado el porcentaje de posesión de cada equipo en tres zonas específicas del campo: la zona defensiva (`def_3rd`), la zona media (`mid_3rd`) y la zona ofensiva (`att_3rd`). El cálculo del porcentaje de posesión en cada zona se realiza mediante la siguiente fórmula:
+
+$$
+\text{Porcentaje en zona} = \left( \frac{\text{Valor de la zona}}{\sum \text{de los valores de las tres zonas}} \right) \times 100
+$$
+
+Este análisis nos permite entender cómo se distribuye la posesión del balón a lo largo del campo. Un equipo que pasa más tiempo en la zona ofensiva suele ser más proactivo y dominante en el juego ofensivo. En contraste, un equipo que posee más tiempo en su zona defensiva puede estar adoptando un estilo de juego más conservador, defendiendo principalmente su área.
+
+### Análisis de la Presión
+
+La presión ejercida por los equipos se evalúa en relación con el tiempo de juego y la posesión. La presión se calcula como la intensidad con la que un equipo intenta recuperar el balón en cada tercio, y se normaliza de la siguiente manera:
+
+$$
+\text{Presión normalizada en zona} = \left( \frac{\text{Valor de la zona}}{\text{Minutos jugados}} \right) \times (100 - \text{Posesión})
+$$
+
+Este cálculo permite evaluar la intensidad de la presión en diferentes zonas del campo, teniendo en cuenta que un equipo que posee más tiempo el balón puede presionar con mayor o menor intensidad en cada zona.
+
+### Desviación de la Presión Respecto al Promedio
+
+Para comparar el comportamiento de un equipo en términos de presión con el promedio de la liga, calculamos la desviación de la presión de cada zona en relación al valor promedio de todos los equipos. La fórmula para calcular esta desviación es:
+
+$$
+\text{Desviación de la presión} = \left( \frac{\text{Presión en zona}}{\text{Presión promedio en zona}} \right) \times 100 - 100
+$$
+
+La desviación es categorizada en tres rangos:
+
+- **Rojo**: Menos presión que el promedio.
+
+- **Amarillo**: Presión similar al promedio.
+
+- **Verde**: Más presión que el promedio.
+
+Este análisis permite identificar qué equipos están presionando más que la media en las distintas zonas del campo y qué equipos adoptan un enfoque más pasivo.
+
+### Análisis de los resultados:
+
+A través del análisis de la posesión y la presión, hemos podido observar algunas tendencias clave:
+
+1. **Distribución de la posesión**: Algunos equipos priorizan el control del balón en su zona ofensiva, lo que les permite dominar el juego y generar oportunidades de gol. Por otro lado, aquellos equipos con mayor posesión en su tercio defensivo tienden a adoptar un enfoque más cauteloso.
+
+2. **Intensidad de la presión**: Los equipos que presionan más intensamente en la zona ofensiva suelen ser más agresivos y orientados hacia la recuperación rápida del balón. Los equipos con una presión más baja, especialmente en la zona defensiva, tienden a mostrar una estrategia menos proactiva.
+
+3. **Desviación de la presión**: Algunos equipos sobresalen en términos de presión, superando el promedio de la liga. Esto indica que están adoptando estrategias más agresivas y enfocadas en la recuperación de balón.
+
+```{r pressure, echo=FALSE, fig.width=15, fig.height=10}
+# Preparamos los datos de posesión a partir del dataset limpio
+result <- prepare_possession_data(cleaned_team_possession)
+
+# Extraemos los diferentes componentes del resultado
+possession_data <- result$possession_data  # Datos generales de posesión
+teams_press_pc_offset <- result$teams_press_pc_offset  # Desviación de la presión ejercida por los equipos con respecto a la media
+teams_poss_zone <- result$teams_poss_zone  # Distribución de la posesión por zonas del campo
+
+# Generamos el gráfico de posesión con los datos procesados
+plot_possession_data(team_stats, teams_press_pc_offset, teams_poss_zone)
+
+```
+
+### Conclusiones
+
+El análisis de posesión y presión nos ha permitido identificar patrones tácticos clave en la Premier League. Los equipos con mayor posesión en el tercio ofensivo tienden a dominar el juego y generar más oportunidades de gol, mientras que aquellos que mantienen la posesión en su zona defensiva adoptan un enfoque más conservador.
+
+En términos de presión, los equipos que ejercen una alta intensidad en el tercio ofensivo buscan recuperar el balón rápidamente y mantener un ritmo de juego agresivo. Por otro lado, equipos con menor presión en esta zona pueden priorizar una defensa más organizada y compacta.
+
+El análisis de la desviación de presión respecto al promedio de la liga ha revelado qué equipos adoptan estrategias más agresivas y cuáles optan por una aproximación más pasiva. Estos hallazgos pueden ser útiles para evaluar tendencias tácticas, identificar fortalezas y debilidades de los equipos y comprender cómo estas estrategias influyen en su rendimiento a lo largo de la temporada.
+
+---
+</div>

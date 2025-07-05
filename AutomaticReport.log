@@ -1,0 +1,92 @@
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+here() starts at C:/Windows/System32
+[1] "Directorio de trabajo: C:/Users/orefi/Desktop/Master/R_Scripts"
+
+Attaching package: 'janitor'
+
+The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test
+
+
+
+processing file: Report_Generic_Stats_PL.Rmd
+1/13                  
+2/13 [setup]          
+3/13                  
+4/13 [goles]          
+5/13                  
+6/13 [xg_plot]        
+7/13                  
+8/13 [comparison_plot]
+9/13                  
+10/13 [test]           
+11/13                  
+12/13 [last5]          
+13/13                  
+output file: Report_Generic_Stats_PL.knit.md
+
+"C:/Users/orefi/AppData/Local/Pandoc/pandoc" +RTS -K512m -RTS Report_Generic_Stats_PL.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output pandoc9500a1d1a97.html --lua-filter "C:\Users\orefi\AppData\Local\R\win-library\4.4\rmarkdown\rmarkdown\lua\pagebreak.lua" --lua-filter "C:\Users\orefi\AppData\Local\R\win-library\4.4\rmarkdown\rmarkdown\lua\latex-div.lua" --lua-filter "C:\Users\orefi\AppData\Local\R\win-library\4.4\rmarkdown\rmarkdown\lua\table-classes.lua" --embed-resources --standalone --variable bs3=TRUE --section-divs --template "C:\Users\orefi\AppData\Local\R\win-library\4.4\rmarkdown\rmd\h\default.html" --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable "mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --include-in-header "C:\Users\orefi\AppData\Local\Temp\Rtmpe2WL1m\rmarkdown-str95005cdf6c0b.html" 
+
+Output created: reports/Daily_Report_Premier_League_20250223_090007.html
+Warning message:
+In data.table::fread(f, encoding = encoding, ...) :
+  Found and resolved improper quoting in first 100 rows. If the fields are not quoted (e.g. field separator does not appear within any field), try quote="" to avoid this warning.
+La tarea ya existe, no se crea una nueva.
+
+Attaching package: 'dplyr'
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
+here() starts at C:/Windows/System32
+[1] "Directorio de trabajo: C:/Users/orefi/Desktop/Master/R_Scripts"
+
+Attaching package: 'janitor'
+
+The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test
+
+
+
+processing file: Report_Generic_Stats_PL.Rmd
+1/15                  
+2/15 [setup]          
+3/15                  
+4/15 [goles]          
+5/15                  
+6/15 [xg_plot]        
+7/15                  
+8/15 [comparison_plot]
+9/15                  
+10/15 [test]           
+11/15                  
+12/15 [last5]          
+13/15                  
+14/15 [pressure]       
+15/15                  
+output file: Report_Generic_Stats_PL.knit.md
+
+"C:/Users/orefi/AppData/Local/Pandoc/pandoc" +RTS -K512m -RTS Report_Generic_Stats_PL.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output pandoc5b6856bd5eac.html --lua-filter "C:\Users\orefi\AppData\Local\R\win-library\4.4\rmarkdown\rmarkdown\lua\pagebreak.lua" --lua-filter "C:\Users\orefi\AppData\Local\R\win-library\4.4\rmarkdown\rmarkdown\lua\latex-div.lua" --lua-filter "C:\Users\orefi\AppData\Local\R\win-library\4.4\rmarkdown\rmarkdown\lua\table-classes.lua" --embed-resources --standalone --variable bs3=TRUE --section-divs --template "C:\Users\orefi\AppData\Local\R\win-library\4.4\rmarkdown\rmd\h\default.html" --no-highlight --variable highlightjs=1 --variable theme=bootstrap --mathjax --variable "mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" --include-in-header "C:\Users\orefi\AppData\Local\Temp\RtmpWgx3cK\rmarkdown-str5b6849fb5e21.html" 
+
+Output created: reports/Daily_Report_Premier_League_20250224_190004.html
+Warning message:
+In data.table::fread(f, encoding = encoding, ...) :
+  Found and resolved improper quoting in first 100 rows. If the fields are not quoted (e.g. field separator does not appear within any field), try quote="" to avoid this warning.
+La tarea ya existe, no se crea una nueva.
